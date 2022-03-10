@@ -1,32 +1,38 @@
-# Kibo FPWP Final Project
-# Put your final project code in this file for submission
-# Add the names of the authors, a brief description, and link to your video in the file called 'readme.md'
-# Then, you can remove these instruction comments
-#beginning
 nganyas=[]
 passengers=[]
+#These lists will be used to store nganya and passenger
+#details
 from tabulate import tabulate
+import sys
 import os
 from time import sleep
+import shutil
+columns = shutil.get_terminal_size().columns
+#The above gets the size of the terminal and allows one 
+#to print at the very center of the terminal
 col_names=["NUMBER PLATE","NAME","SACCO","SEATS","PRICE","TIME(MIN)"]
+#These are the headers to the tables that will be 
+#displayed as passengers and nganyas
 col_names2=["INDEX","MATATU","PASSENGER NAME", "MATATU BOOKED", "SEATS BOOKED", "CONTACT"]
 def menu():
   os.system('cls')
-  print("**********ROUTE 111*************".center(60))
-  print("****MATATU BOOKING SYSTEM****".center(60))
-  print("*********************************".center(60))
-  print("<<<<<<<<<<WELCOME USERS>>>>>>>>>>".center(60))
+  print("************NGONG**************".center(columns))
+  print("**********ROUTE 111*************".center(columns))
+  print("****MATATU BOOKING SYSTEM****".center(columns))
+  print("*********************************".center(columns))
+  print("<<<<<<<<<<WELCOME USERS>>>>>>>>>>".center(columns))
   print("")
-  print("MENU".center(60))
-  print("******".center(60))
-  print("[1] VIEW INFORMATION".center(60))
-  print("[2] BOOK NGANYA".center(60))
-  print("[3] CANCEL BOOKED NGANYA".center(60))
-  print("[4] ADMIN".center(60))
-  print("[5] EXIT".center(60))
-  print("********************************".center(60))
-  print("********************************".center(60))
-  choice=input("ENTER YOUR CHOICE: ".center(60))
+  print("MENU".center(columns))
+  print("******".center(columns))
+  print("[1] VIEW INFORMATION".center(columns))
+  print("[2] BOOK NGANYA".center(columns))
+  print("[3] CANCEL BOOKED NGANYA".center(columns))
+  print("[4] ADMIN".center(columns))
+  print("[5] EXIT".center(columns))
+  print("********************************".center(columns))
+  print("********************************".center(columns))
+  print("ENTER YOUR CHOICE".center(columns))
+  choice=input(": ".center(columns))
   if choice=='4':
       password()
   elif choice=='1':
@@ -35,7 +41,7 @@ def menu():
        input("Press Enter to continue...")
        menu()
   elif choice=='5':
-        print("Kindly wait") 
+      sys.exit("EXIT")
   elif choice=='2':
       loading()
       add_passenger()
@@ -50,6 +56,7 @@ def menu():
     
 
 def first_nganyas():
+  #This function adds the first nganyas to the system
   addnganya=[]
   addnganya2=[]
   num_plate="KCA711D"
@@ -73,6 +80,7 @@ def first_nganyas():
   addnganya2.append(60)
   nganyas.append(addnganya2)
 def first_passengers():
+  #First function to run but adds the first passengers to the list
   first_nganyas()
   addpassenger=[]
   addpassenger2=[]
@@ -80,7 +88,7 @@ def first_passengers():
   seat_book=3
   nganyas[nganya_book][3]=nganyas[nganya_book][3]-seat_book
   passenger_name="Emmy"
-  passenger_contact=738568903
+  passenger_contact=254738568903
   addpassenger.append(nganya_book)
   addpassenger.append(passenger_name)
   addpassenger.append(nganyas[nganya_book][1])
@@ -93,7 +101,7 @@ def first_passengers():
   seat_book=2
   nganyas[nganya_book][3]=nganyas[nganya_book][3]-seat_book
   passenger_name="Seun"
-  passenger_contact=765367534
+  passenger_contact=233765367534
   addpassenger2.append(nganya_book)
   addpassenger2.append(passenger_name)
   addpassenger2.append(nganyas[nganya_book][1])
@@ -104,7 +112,9 @@ def first_passengers():
 
 
 def add_nganya():
+  #Asks for input in order to add nganyas
   addnganya=[]
+  #This list will be appended on already declared list nganya
   num_plate=input("Enter number plate of matatu: ")
   addnganya.append(num_plate)
   nganya_name=input("Enter the name of matatu: ")
@@ -113,19 +123,21 @@ def add_nganya():
   addnganya.append(nganya_sacco)
   seat_number=int(input("Enter number of seats in matatu: "))
   addnganya.append(seat_number)
-  nganya_fare=int("Enter fare per passenger: ")
+  nganya_fare=int(input("Enter fare per passenger: "))
   addnganya.append(nganya_fare)
   nganya_time=int(input("Enter transit time: "))
   addnganya.append(nganya_time)
   nganyas.append(addnganya)
   print("INFO SUCCESSFULLY SAVED IN SYSTEM")
   input("Press Enter to continue...")
-  menu()
+  admin()
 
 def show_info ():
+  #tabulates nganya info
   print(tabulate(nganyas,headers=col_names,showindex="always")) 
   
 def delete_nganya():
+  #delets nganyas from system
   show_info()
   choice=int(input("Which matatu do you wish to remove from the system?"))
   if choice>len(nganyas):
@@ -138,6 +150,7 @@ def delete_nganya():
     input("Press Enter to continue...")
     
 def add_passenger():
+  #adds passengers to the system
   show_info()
   addpassenger=[]
   try:
@@ -149,7 +162,7 @@ def add_passenger():
    seat_book=int(input("How many seats do you want to book? "))
    if seat_book>nganyas[nganya_book][3]:
     print("Sorry, we do not have that many available seats. Try again")
-    loading()
+    sleep(1)
     add_passenger()
    else:
     nganyas[nganya_book][3]=nganyas[nganya_book][3]-seat_book
@@ -157,7 +170,7 @@ def add_passenger():
   except:
     print("Invalid input")
     print("Try again")
-    loading()
+    sleep(1)
     add_passenger()
   passenger_name=input("Kindly input your name: ")
   passenger_contact=input("Kinldy input your mobile number: ")
@@ -221,24 +234,25 @@ def cancel_booking():
   
   #if seat_book
 def admin():
+  #we'll now run the admin functions
   loading()
   breakline="=================================================================="
-  print(breakline.center(60))
-  print("********************MATATU BOOKING SYSTEM*******************".center(60))
-  print(breakline.center(60))
+  print(breakline.center(columns))
+  print("********************MATATU BOOKING SYSTEM*******************".center(columns))
+  print(breakline.center(columns))
   print("")
-  print("<<<<<<<<<<<<<<<WELCOME ADMIN>>>>>>>>>>>>>>>".center(60))
+  print("<<<<<<<<<<<<<<<WELCOME ADMIN>>>>>>>>>>>>>>>".center(columns))
   print("")
-  print("************************************".center(60))
-  print("||      CHOOSE YOUR OPERATION     ||".center(60))
-  print("||--------------------------------||".center(60))
-  print("||      [1] VIEW PASSENGERS       ||".center(60))
-  print("||      [2] ADD NGANYA            ||".center(60))
-  print("||      [3] DELETE NGANYA         ||".center(60))
-  print("||      [4] BACK                  ||".center(60))
-  print("||                                ||".center(60))
-  print("************************************".center(60))
-  print(breakline.center(60))
+  print("************************************".center(columns))
+  print("||      CHOOSE YOUR OPERATION     ||".center(columns))
+  print("||--------------------------------||".center(columns))
+  print("||      [1] VIEW PASSENGERS       ||".center(columns))
+  print("||      [2] ADD NGANYA            ||".center(columns))
+  print("||      [3] DELETE NGANYA         ||".center(columns))
+  print("||      [4] BACK                  ||".center(columns))
+  print("||                                ||".center(columns))
+  print("************************************".center(columns))
+  print(breakline.center(columns))
   choice=input("ENTER YOUR CHOICE: ".center(60))
   if choice=='1':
     print(tabulate(passengers,headers=col_names2,showindex=True))
@@ -252,8 +266,13 @@ def admin():
     admin()
   elif choice=='4':
     menu()
+  else: 
+    print("Invalid input. Try again")
+    sleep(1)
+    menu()
 
 def password():
+  #You can't access the admin without getting the correct password
   PASSWORD="KIBO2022"
   trial=input("ENTER PASSWORD TO ACCESS ADMIN::  ")
   if trial==PASSWORD:
@@ -263,12 +282,7 @@ def password():
     input("Press Enter to continue...")
     menu()
 def loading():
-  print("PROCESSING")
-  print(".")
-  sleep(1)
-  print(".")
-  sleep(1)
-  print(".")
+  #Simple waste time function
   sleep(1)
   os.system("cls")
 #THIS IS THE ONLY FUNCTION THAT IS EXECUTED ON RUN
