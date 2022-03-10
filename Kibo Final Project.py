@@ -11,37 +11,42 @@ from time import sleep
 col_names=["NUMBER PLATE","NAME","SACCO","SEATS","PRICE","TIME(MIN)"]
 col_names2=["INDEX","MATATU","PASSENGER NAME", "MATATU BOOKED", "SEATS BOOKED", "CONTACT"]
 def menu():
-    os.system('cls')
-    print("**********ROUTE 111*************".center(60))
-    print("****MATATU BOOKING SYSTEM****".center(60))
-    print("*********************************".center(60))
-    print("<<<<<<<<<<WELCOME USERS>>>>>>>>>>".center(60))
-    print("")
-    print("MENU".center(60))
-    print("******".center(60))
-    print("[1] VIEW INFORMATION".center(60))
-    print("[2] BOOK NGANYA".center(60))
-    print("[3] CANCEL BOOKED NGANYA".center(60))
-    print("[4] ADMIN".center(60))
-    print("[5] EXIT".center(60))
-    print("********************************".center(60))
-    print("********************************".center(60))
-    choice=input("ENTER YOUR CHOICE: ".center(60))
-    if choice=='4':
+  os.system('cls')
+  print("**********ROUTE 111*************".center(60))
+  print("****MATATU BOOKING SYSTEM****".center(60))
+  print("*********************************".center(60))
+  print("<<<<<<<<<<WELCOME USERS>>>>>>>>>>".center(60))
+  print("")
+  print("MENU".center(60))
+  print("******".center(60))
+  print("[1] VIEW INFORMATION".center(60))
+  print("[2] BOOK NGANYA".center(60))
+  print("[3] CANCEL BOOKED NGANYA".center(60))
+  print("[4] ADMIN".center(60))
+  print("[5] EXIT".center(60))
+  print("********************************".center(60))
+  print("********************************".center(60))
+  choice=input("ENTER YOUR CHOICE: ".center(60))
+  if choice=='4':
       password()
-    elif choice=='1':
+  elif choice=='1':
        loading()
        show_info()
        input("Press Enter to continue...")
        menu()
-    elif choice=='5':
+  elif choice=='5':
         print("Kindly wait") 
-    elif choice=='2':
+  elif choice=='2':
       loading()
       add_passenger()
-    elif choice=='3':
+  elif choice=='3':
       loading()
       cancel_booking()
+  else:
+    print("Invalid choice")
+    print("Try again")
+    loading()
+    menu()
     
 
 def first_nganyas():
@@ -135,24 +140,32 @@ def delete_nganya():
 def add_passenger():
   show_info()
   addpassenger=[]
-  nganya_book=int(input("What is the index of the matatu you want to book? "))
-  addpassenger.append(nganya_book)
-  if nganya_book>len(nganyas):
+  try:
+   nganya_book=int(input("What is the index of the matatu you want to book? "))
+   addpassenger.append(nganya_book)
+   if nganya_book>len(nganyas):
     print("Index too high")
     add_passenger()
-  seat_book=int(input("How many seats do you want to book? "))
-  if seat_book>nganyas[nganya_book][3]:
-    print("Sorry, we do not have that many available seats")
-  else:
+   seat_book=int(input("How many seats do you want to book? "))
+   if seat_book>nganyas[nganya_book][3]:
+    print("Sorry, we do not have that many available seats. Try again")
+    loading()
+    add_passenger()
+   else:
     nganyas[nganya_book][3]=nganyas[nganya_book][3]-seat_book
     #The above subtracts the seats booked from the available seats
+  except:
+    print("Invalid input")
+    print("Try again")
+    loading()
+    add_passenger()
   passenger_name=input("Kindly input your name: ")
-  passenger_contact=int(input("Kinldy input your mobile number: "))
+  passenger_contact=input("Kinldy input your mobile number: ")
   addpassenger.append(passenger_name)
   addpassenger.append(nganyas[nganya_book][1])
   #The above adds the name of the booked matatu to the list
   addpassenger.append(seat_book)
-  addpassenger.append(passenger_contact)
+  addpassenger.append(int(passenger_contact))
   passengers.append(addpassenger)
   print("SEATS SUCCESSFULLY BOOKED!")
   input("Press Enter to continue...")
@@ -160,8 +173,18 @@ def add_passenger():
 
 def cancel_booking():
   pass_cancel=input("Kindly enter your name: ")
-  cancel_contact=int(input("Kindly enter your phone number: "))
-  cancel_matatu=int(input("What is the index of the nganya you booked: "))
+  try:
+   cancel_contact=int(input("Kindly enter your phone number: "))
+   cancel_matatu=int(input("What is the index of the nganya you booked: "))
+   if (cancel_matatu>len(nganyas)):
+      print("Index too high. Try again")
+      cancel_booking()
+  except:
+    print("Invalid input")
+    print("Try again")
+    sleep(1)
+    cancel_booking()
+  checker=len(passengers)
   chuja=0
   #Below, we check whether the phone number entered 
   #exists in each list in list passengers
@@ -182,6 +205,15 @@ def cancel_booking():
     #where the number of seats booked is stored in the third index
     #And then, the specific index, represented by chuja, is popped
     #out
+  if checker==len(passengers):
+    print(pass_cancel)
+    print("Incorrect information. Kindly confirm and repeat")
+    input("Press Enter to continue...")
+    #checker assists in checking whether the length of passengers is 
+    #same as before. If a seat was not removed, the length will be the
+    #same and therefore, the information that was input was not correct
+    #/was not found in the list
+    
     
   menu() 
 
